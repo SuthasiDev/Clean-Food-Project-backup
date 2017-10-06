@@ -24,7 +24,7 @@ public class AddCommentActivity extends AppCompatActivity {
 
     //Explicit
     private TextView dateTextView, nameUserTextView, recipeTextView;
-    private EditText commentEditText;
+    private EditText commentEditText, userEditText;
     private String dateString, nameUserString, recipeString, commentString;
 
     @Override
@@ -40,13 +40,13 @@ public class AddCommentActivity extends AppCompatActivity {
     }   //Main Method
 
     private void showView() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         Date date = new Date();
         dateString = dateFormat.format(date);
         dateTextView.setText(dateString);
 
-        nameUserString = getIntent().getStringExtra("nameUser");
-        nameUserTextView.setText(nameUserString);
+//        nameUserString = getIntent().getStringExtra("nameUser");
+//        nameUserTextView.setText(nameUserString);
 
         recipeString = getIntent().getStringExtra("Recipe");
         recipeTextView.setText(recipeString);
@@ -60,7 +60,7 @@ public class AddCommentActivity extends AppCompatActivity {
 
         if (commentString.equals("")) {
             // ******* //
-
+            Toast.makeText(AddCommentActivity.this, "Please Fill Comment", Toast.LENGTH_SHORT).show();
         } else {
             //No Space
             updateToMySQL();
@@ -70,6 +70,9 @@ public class AddCommentActivity extends AppCompatActivity {
     }
 
     private void updateToMySQL() {
+
+        nameUserString = userEditText.getText().toString().trim();
+
         // Connected Http
         StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy
                 .Builder().permitAll().build();
@@ -84,7 +87,8 @@ public class AddCommentActivity extends AppCompatActivity {
             nameValuePairs.add(new BasicNameValuePair("Comment", commentString));
 
             HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://swiftcodingthai.com/tan/php_add_comment.php");
+            MyConstant myConstant = new MyConstant();
+            HttpPost httpPost = new HttpPost(myConstant.getUrlPostComment());
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
             httpClient.execute(httpPost);
 
@@ -104,7 +108,7 @@ public class AddCommentActivity extends AppCompatActivity {
     private void bindWidget() {
 
         dateTextView = (TextView) findViewById(R.id.textView8);
-        nameUserTextView = (TextView) findViewById(R.id.textView9);
+        userEditText = (EditText) findViewById(R.id.editName);
         recipeTextView = (TextView) findViewById(R.id.textView10);
 
         commentEditText = (EditText) findViewById(R.id.editText3);

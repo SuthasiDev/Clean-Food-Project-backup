@@ -57,7 +57,6 @@ public class ServiceActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.contentFragment, new AddRestautantFragment()).commit();
         }
 
-
         return super.onOptionsItemSelected(item);
     }
 }   //Main Class
